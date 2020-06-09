@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+
+{% block main %}
+<h3> Make new room </h3>
+
+<p> Room Code: {{room_id}} </p>
+<form action="/initroom/{{room_id}}", method = "POST">
+  <br>
+  Password:
+  <br>
+  <input type = "text" name = "password">
+  <br> <br>
+  <input type = "submit" value = "Create">
+</form>
+{% endblock %}

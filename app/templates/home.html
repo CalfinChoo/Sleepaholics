@@ -3,4 +3,29 @@
 {% block main %}
 <h3> WELCOME TO PICTIONARY </h3>
 <p> Hello, {{ign}} </p>
+<button id="create"> Create New Room </button>
+<br> <br>
+Join game:
+<br>
+<form action="/home" method="POST">
+  Code
+  <br>
+  <input type="text" name="room_id">
+  <br>
+  password
+  <br>
+  <input type="text" name="password">
+  <br>
+  <input type="submit">
+</form>
+<p> {{errormessage}} </p>
+{% endblock %}
+
+{% block script %}
+<script>
+  createBut = document.getElementById("create");
+  createBut.addEventListener("click", function() {
+    window.location.href = "/create"})
+</script>
+</script>
 {% endblock %}
