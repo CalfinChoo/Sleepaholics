@@ -1,0 +1,8 @@
+jacksonZ -- 2020-06-09 18:22
+  - DB is initialized whenever app is run
+  - Created login/register routes
+  - Login/register works and adds to db
+  - Created homepage with create game and join game features
+  - Create game creates new game with random room code and it creates a new row in DB (password optional)
+  - Joining a game requires correct code and password, and adds one to the player count (nothing happens when you leave however)
+  - Basic template and routes are done
