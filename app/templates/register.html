@@ -1,12 +1,17 @@
 {% extends "index.html" %}
 
 {% block title %}
-Login
+Register
 {% endblock %}
 
 {% block main %}
+<center>
   <h3> SLEEPAHOLICS </h3>
-  <p> {{errormessage}} </p>
+  {% for message in get_flashed_messages() %}
+  <br>
+  &#9888; {{ message }} &#9888;
+  <br><br>
+  {% endfor %}
   <form action='/register', method="POST">
       Username:
       <br>
@@ -23,7 +28,7 @@ Login
       <input type = 'password' name = 'password2' >
       <br>
       <br>
-      Name
+      Name:
       <br>
       <input type = 'text' name = 'ign' >
       <br>
@@ -33,7 +38,8 @@ Login
       <br>
   </form>
   <br>
-  <button type="button" id="login">Register here</button>
+  <button type="button" id="login">Login Here</button>
+</center>
 {% endblock %}
 
 {% block script %}

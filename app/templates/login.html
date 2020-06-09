@@ -5,8 +5,13 @@ Login
 {% endblock %}
 
 {% block main %}
+<center>
   <h3> SLEEPAHOLICS </h3>
-  <p> {{errormessage}} </p>
+  {% for message in get_flashed_messages() %}
+  <br>
+  &#9888; {{ message }} &#9888;
+  <br><br>
+  {% endfor %}
   <form action='/login', method="POST">
       Username:
       <br>
@@ -23,7 +28,8 @@ Login
       <br>
   </form>
   <br>
-  <button type="button" id="register">Register here</button>
+  <button type="button" id="register">Register Here</button>
+  </center>
 {% endblock %}
 
 {% block script %}

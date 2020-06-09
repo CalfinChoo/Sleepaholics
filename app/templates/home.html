@@ -1,24 +1,34 @@
 {% extends "index.html" %}
 
+{% block title %}
+Home
+{% endblock %}
+
 {% block main %}
+<center>
 <h3> WELCOME TO PICTIONARY </h3>
-<p> Hello, {{ign}} </p>
+<p> Hello, <b>{{ign}}</b>! </p>
 <button id="create"> Create New Room </button>
+<br><br>
+<form action='/logout'>
+    <input type ='submit' value = 'Logout'>
+</form>
 <br> <br>
-Join game:
-<br>
+<b>Join Game:</b>
+<br><br>
 <form action="/home" method="POST">
-  Code
+  Code:
   <br>
   <input type="text" name="room_id">
   <br>
-  password
+  Password:
   <br>
   <input type="text" name="password">
-  <br>
+  <br><br>
   <input type="submit">
 </form>
 <p> {{errormessage}} </p>
+</center>
 {% endblock %}
 
 {% block script %}
@@ -26,6 +36,5 @@ Join game:
   createBut = document.getElementById("create");
   createBut.addEventListener("click", function() {
     window.location.href = "/create"})
-</script>
 </script>
 {% endblock %}
