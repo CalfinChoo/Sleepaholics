@@ -1,0 +1,34 @@
+{% extends "index.html" %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block main %}
+  <h3> SLEEPAHOLICS </h3>
+  <form action='/login', method="POST">
+      Username:
+      <br>
+      <input type = 'text' name = 'username' >
+      <br>
+      <br>
+      Password:
+      <br>
+      <input type = 'password' name = 'password' >
+      <br>
+      <br>
+      <input type = 'submit' name = 'sub1'>
+      <br>
+      <br>
+  </form>
+  <br>
+  <button type="button" id="register">Register here</button>
+{% endblock %}
+
+{% block script %}
+  <script>
+    registerBut = document.getElementById("register");
+    registerBut.addEventListener("click", function() {
+      window.location.href = "/register"})
+  </script>
+{% endblock %}
