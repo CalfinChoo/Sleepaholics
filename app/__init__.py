@@ -6,6 +6,8 @@
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify, flash
 import urllib.request, json
 import os
+import random
+import string
 from os import urandom
 
 from db import init_db, addUser, checkUser
@@ -51,6 +53,13 @@ def register():
             flash("Passwords do not match or username is taken")
             return redirect(url_for("register"))
     return render_template('register.html')
+
+@app.route("/create")
+def create():
+    roomCode = ''
+    for i in range(6):
+        roomCode+=random.choice(string.ascii_letters + string.digits)
+    return render_template('create.html', room_id=roomCode)
 
 #logout route: removes the user from session and redirects to root
 @app.route("/logout")
