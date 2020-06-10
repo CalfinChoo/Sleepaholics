@@ -1,5 +1,85 @@
 {% extends "index.html" %}
 
+{% block title %}
+Game
+{% endblock %}
+
+{% block style %}
+<style type="text/css" rel="stylesheet">
+  div {
+    border: 1px solid;
+    position: absolute
+  }
+  #header {
+    height: 50px;
+    width: 90%;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 15%;
+  }
+  #playerlist {
+    height: 30vw;
+    width: 22%;
+    transform: translateX(-50%);
+    left: 16%;
+    top: 25%;
+  }
+  #chat {
+    height: 30vw;
+    width: 22%;
+    transform: translateX(-50%);
+    left: 84%;
+    top: 25%;
+  }
+  .svg-container {
+  	display: inline-block;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 25%;
+  	width: 40vw;
+    height: 30vw;
+  	vertical-align: middle;
+  	overflow: hidden;
+  }
+  .svg-content {
+  	display: inline-block;
+  	position: absolute;
+  	top: 0;
+  	left: 0;
+  }
+</style>
+{% endblock %}
+
 {% block main %}
-Roomcode: {{room_id}}
+<center>
+<h3> PICTIONARY </h3>
+Roomcode: {{room_id}} <br>
+<button id="home"> Home </button>
+</center>
+<div id="header">
+time, rounds, word
+</div>
+<div id="playerlist">
+PlayerList
+</div>
+
+<div class="svg-container">
+  <svg id="canvas" version="1.1" viewBox="0 0 500 400"
+  preserveAspectRatio="xMinYMin meet" class="svg-content">
+  <circle fill="#F7941E" stroke="#231F20" stroke-width="10"
+  	stroke-miterlimit="10" cx="250" cy="250" r="200" opacity="0.6" />
+  </svg>
+</div>
+
+<div id="chat">
+Chat
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+  homeBut = document.getElementById("home");
+  homeBut.addEventListener("click", function() {
+    window.location.href = "/home"})
+</script>
 {% endblock %}

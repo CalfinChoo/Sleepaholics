@@ -16,7 +16,7 @@ Home
 <br> <br>
 <b>Join Game:</b>
 <br><br>
-<form action="/home" method="POST">
+<form action="/game" method="POST">
   Code:
   <br>
   <input type="text" name="room_id">
@@ -27,7 +27,11 @@ Home
   <br><br>
   <input type="submit">
 </form>
-<p> {{errormessage}} </p>
+{% for message in get_flashed_messages() %}
+<br>
+&#9888; {{ message }} &#9888;
+<br><br>
+{% endfor %}
 </center>
 {% endblock %}
 

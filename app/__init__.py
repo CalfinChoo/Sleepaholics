@@ -61,6 +61,14 @@ def create():
         roomCode+=random.choice(string.ascii_letters + string.digits)
     return render_template('create.html', room_id=roomCode)
 
+@app.route("/game", methods=["GET", "POST"])
+def game():
+    if len(request.form) != 0:
+        # insert room_id / password checker websocket thingy
+        # if not match / does not exist, flash error and redirecct to home
+        return render_template("game.html", room_id = request.form["room_id"])
+    return render_template('game.html')
+
 #logout route: removes the user from session and redirects to root
 @app.route("/logout")
 def logout():
