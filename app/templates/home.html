@@ -1,44 +1,44 @@
 {% extends "index.html" %}
 
-{% block title %}
-Home
-{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block main %}
-<center>
-<h3> WELCOME TO PICTIONARY </h3>
-<p> Hello, <b>{{ign}}</b>! </p>
-<button id="create"> Create New Room </button>
-<br><br>
-<form action='/logout'>
-    <input type ='submit' value = 'Logout'>
-</form>
-<br> <br>
-<b>Join Game:</b>
-<br><br>
-<form action="/game" method="POST">
-  Code:
-  <br>
-  <input type="text" name="room_id">
-  <br>
-  Password:
-  <br>
-  <input type="text" name="password">
-  <br><br>
-  <input type="submit">
-</form>
-{% for message in get_flashed_messages() %}
-<br>
-&#9888; {{ message }} &#9888;
-<br><br>
-{% endfor %}
-</center>
+<div class="center-screen">
+    <div class="card">
+        <div class="card-body" style="width: 600px;">
+            <h2 style="color: white;">Welcome to Pictionary!</h2>
+            <div class="row mt-4">
+                <div class="col d-flex flex-column">
+                    <h5>Hello, <b>{{ ign }}</b>!</h5>
+                    <div class="mt-3">
+                        <button class="btn btn-primary" id="create">Create New Room</button><br>
+                    </div>
+                    <form class="mt-3" action="/logout">
+                        <button class="btn btn-danger" type="submit">Logout</button>
+                    </form>
+                </div>
+
+                <div class="col">
+                    <h5>Join Game</h5>
+                    <form action="/game" method="POST">
+                        <label>Room ID</label><br>
+                        <input type="text" name="room_id"><br>
+                        <button class="btn btn-primary mt-2" type="submit">Join</button>
+                    </form>
+                    {% for message in get_flashed_messages() %}
+                        <p style="color: red;">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block script %}
-<script>
-  createBut = document.getElementById("create");
-  createBut.addEventListener("click", function() {
-    window.location.href = "/create"})
-</script>
+  <script>
+    createBut = document.getElementById("create");
+    createBut.addEventListener("click", function() {
+      window.location.href = "/create"})
+  </script>
 {% endblock %}

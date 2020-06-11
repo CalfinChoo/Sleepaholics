@@ -4,17 +4,20 @@
 # 2020-06-05
 
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify, flash
+from flask_socketio import SocketIO, send, join_room
+
 import urllib.request, json
 import os
 import random
 import string
 from os import urandom
 
-from db import init_db, addUser, checkUser
+from db import *
 from pprint import pprint
 
 app = Flask(__name__)
 app.secret_key = urandom(32)
+socketio = SocketIO(app, cors_allowed_origins="*")
 DB_FILE = "info.db"
 init_db(DB_FILE)
 
@@ -56,18 +59,41 @@ def register():
 
 @app.route("/create")
 def create():
-    roomCode = ''
-    for i in range(6):
-        roomCode+=random.choice(string.ascii_letters + string.digits)
-    return render_template('create.html', room_id=roomCode)
+    dup = True
+    room_id = ''
+    while dup:
+        for i in range(6):
+            room_id+=random.choice(string.ascii_letters + string.digits)
+        if checkroomid(DB_FILE, room_id):
+            dup = False
+    session["room_id"] = room_id
+    createRoom(DB_FILE, room_id)
+    return redirect(url_for("game"))
 
 @app.route("/game", methods=["GET", "POST"])
 def game():
     if len(request.form) != 0:
-        # insert room_id / password checker websocket thingy
+        # change lines below for room_id / password checker websocket thingy
         # if not match / does not exist, flash error and redirecct to home
-        return render_template("game.html", room_id = request.form["room_id"])
-    return render_template('game.html')
+        if findRoom(DB_FILE, request.form["room_id"]):
+            return render_template("game.html", room=request.form["room_id"], room_id=request.form["room_id"])
+        return redirect(url_for("home"))
+    return render_template('game.html', room=session["room_id"], room_id=session["room_id"])
+
+
+
+# WEBSOCKET STUFF
+@socketio.on('join_room')
+def handle_join_room_event(data):
+    print("User connected to room {}".format(data["room"]))
+    join_room(data['room'])
+    socketio.emit('room_announcement', room=data["room"])
+
+@socketio.on('send_message')
+def handle_send_message_event(data):
+    socketio.emit('receive_message', data, room=data["room"])
+
+
 
 #logout route: removes the user from session and redirects to root
 @app.route("/logout")
@@ -78,4 +104,4 @@ def logout():
 
 if __name__ == "__main__":
     app.debug = True
-    app.run()
+    socketio.run(app)

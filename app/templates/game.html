@@ -1,10 +1,10 @@
 {% extends "index.html" %}
 
-{% block title %}
-Game
-{% endblock %}
+{% block title %}Game{% endblock %}
 
 {% block style %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <style type="text/css" rel="stylesheet">
   .container-fluid {
     position: absolute;
@@ -43,6 +43,7 @@ Game
     transform: translateX(-50%);
     left: 50%;
     top: 25%;
+    background-color: white;
   }
   .toolbar, #tb {
     border: 1px solid;
@@ -97,13 +98,15 @@ Game
 {% endblock %}
 
 {% block main %}
+
 <center>
-<h3> PICTIONARY </h3>
-Roomcode: {{room_id}} <br>
-<button id="home"> Home </button>
+    <h3> Pictionary </h3>
+    Roomcode: {{room_id}} <br>
+    <button id="home"> Home </button>
 </center>
+
 <div id="header">
-time, rounds, word
+    time, rounds, word
 </div>
 
 <div class="container-fluid">
@@ -151,7 +154,9 @@ time, rounds, word
     </div>
     <div class="col-sm">
       <div id="chat">
-      Chat
+          <ul id="messages"></ul>
+          <input type="text" id="myMessage">
+          <button id="sendbutton">Send</button>
       </div>
     </div>
   </div>
@@ -169,14 +174,41 @@ time, rounds, word
     <polyline points="0 0 50 50 100 10" fill="none" stroke="black"></polyline>
   </svg>
 </div> -->
-
 {% endblock %}
 
 {% block script %}
 <script>
-  homeBut = document.getElementById("home");
-  homeBut.addEventListener("click", function() {
-    window.location.href = "/home"})
+    homeBut = document.getElementById("home");
+    homeBut.addEventListener("click", function() {
+        window.location.href = "/home"})
+
+    $(document).ready(function() {
+        var socket = io.connect('http://127.0.0.1:5000/');
+
+        socket.on('connect', function() {
+            socket.emit('join_room', {
+                room: "{{ room }}"
+            });
+        });
+
+        socket.on('room_announcement', function(data) {
+            $("#messages").append("<li>User joined room!</li>")
+        })
+
+        socket.on('receive_message', function(data) {
+            console.log(data.message)
+            $("#messages").append("<li>"+data.message+"</li>")
+        })
+
+        $("#sendbutton").on('click', function() {
+            socket.emit('send_message', {
+                room: "{{ room }}",
+                message: $("#myMessage").val()
+            })
+            $("#myMessage").val("")
+        })
+
+    });
 </script>
 <script src="/static/script.js" charset="utf-8"></script>
 {% endblock %}

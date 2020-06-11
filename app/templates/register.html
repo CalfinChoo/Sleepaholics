@@ -5,41 +5,33 @@ Register
 {% endblock %}
 
 {% block main %}
-<center>
-  <h3> SLEEPAHOLICS </h3>
-  {% for message in get_flashed_messages() %}
-  <br>
-  &#9888; {{ message }} &#9888;
-  <br><br>
-  {% endfor %}
-  <form action='/register', method="POST">
-      Username:
-      <br>
-      <input type = 'text' name = 'username' >
-      <br>
-      <br>
-      Password:
-      <br>
-      <input type = 'password' name = 'password' >
-      <br>
-      <br>
-      Confirm Password:
-      <br>
-      <input type = 'password' name = 'password2' >
-      <br>
-      <br>
-      Name:
-      <br>
-      <input type = 'text' name = 'ign' >
-      <br>
-      <br>
-      <input type = 'submit' name = 'sub1'>
-      <br>
-      <br>
-  </form>
-  <br>
-  <button type="button" id="login">Login Here</button>
-</center>
+
+<div class="center-screen">
+    <div class="card" style="justify-content: space-around;">
+        <div class="card-body" style="width: 400px; display: flex; flex-direction: column; justify-content: space-around;">
+            <h2 style="color: white;">Sleepaholics</h2>
+            {% for message in get_flashed_messages() %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+            <form action="/register", method="POST">
+                <label>Username</label><br>
+                <input type="text" name="username"><br>
+                <label>Password</label><br>
+                <input type="password" name="password"><br>
+                <label>Confirm Password</label><br>
+                <input type="password" name="password2"><br>
+                <label>Display Name</label><br>
+                <input type="text" name="ign"><br>
+                <button class="btn btn-success mt-3" type="submit" name="sub1">Submit</button>
+            </form>
+
+            <h6 class="mt-4">Already have an account?</h6>
+            <div>
+                <button class="btn btn-primary" id="login">Login Here</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block script %}
