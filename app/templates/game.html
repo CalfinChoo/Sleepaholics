@@ -51,29 +51,33 @@ Game
 {% endblock %}
 
 {% block main %}
+
 <center>
-<h3> PICTIONARY </h3>
-Roomcode: {{room_id}} <br>
-<button id="home"> Home </button>
+  <h3> PICTIONARY </h3>
+  Roomcode: {{room_id}} <br>
+  <button id="home"> Home </button>
 </center>
+
 <div id="header">
-time, rounds, word
+  time, rounds, word
 </div>
+
 <div id="playerlist">
-PlayerList
+  PlayerList
 </div>
 
 <div class="svg-container">
   <svg id="canvas" version="1.1" viewBox="0 0 500 400"
-  preserveAspectRatio="xMinYMin meet" class="svg-content">
-  <circle fill="#F7941E" stroke="#231F20" stroke-width="10"
+    preserveAspectRatio="xMinYMin meet" class="svg-content">
+      <circle fill="#F7941E" stroke="#231F20" stroke-width="10"
   	stroke-miterlimit="10" cx="250" cy="250" r="200" opacity="0.6" />
   </svg>
 </div>
 
 <div id="chat">
-Chat
+  Chat
 </div>
+
 {% endblock %}
 
 {% block script %}
