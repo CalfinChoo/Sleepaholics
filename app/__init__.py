@@ -58,7 +58,7 @@ def register():
 def create():
     roomCode = ''
     for i in range(6):
-        roomCode+=random.choice(string.ascii_letters + string.digits)
+        roomCode += random.choice(string.ascii_letters + string.digits)
     return render_template('create.html', room_id=roomCode)
 
 @app.route("/game", methods=["GET", "POST"])
