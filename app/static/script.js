@@ -1,6 +1,7 @@
 var c = document.getElementById("canvas");
 var currentColorDiv = document.getElementById("currentColor");
 var colors = [];
+var strokeWidth = 4;
 colors.push(document.getElementById("white"));
 colors.push(document.getElementById("gray"));
 colors.push(document.getElementById("red"));
@@ -32,12 +33,53 @@ clear.addEventListener("click", function(){clean();});
 var isDrawing = false;
 var lastLine;
 var currentColor = "black";
-
+currentColorDiv.setAttribute("style", "background-color:white");
+colorcircle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+colorcircle.setAttribute("cx", 25);
+colorcircle.setAttribute("cy", 25);
+colorcircle.setAttribute("r", strokeWidth);
+colorcircle.setAttribute("fill", currentColor);
+colorcircle.setAttribute("stroke", "black")
+currentColorDiv.appendChild(colorcircle);
 
 var updateColor = function(e) {
   currentColor = e.style.backgroundColor;
-  currentColorDiv.style.backgroundColor = e.style.backgroundColor;
+  currentColorDiv.innerHTML = "";
+  currentColorDiv.setAttribute("style", "background-color:white");
+  colorcircle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  colorcircle.setAttribute("cx", 25);
+  colorcircle.setAttribute("cy", 25);
+  colorcircle.setAttribute("r", (strokeWidth/2));
+  colorcircle.setAttribute("fill", currentColor);
+  colorcircle.setAttribute("stroke", "black")
+  currentColorDiv.appendChild(colorcircle);
 }
+
+var changeWidth = function(e) {
+  if(strokeWidth == 4){
+    strokeWidth = 8;
+  }
+  else if(strokeWidth == 8){
+    strokeWidth = 16;
+  }
+  else if(strokeWidth == 16){
+    strokeWidth = 32;
+  }
+  else if(strokeWidth == 32){
+    strokeWidth = 4;
+  }
+  currentColorDiv.innerHTML = "";
+  currentColorDiv.setAttribute("style", "background-color:white");
+  colorcircle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  colorcircle.setAttribute("cx", 25);
+  colorcircle.setAttribute("cy", 25);
+  colorcircle.setAttribute("r", (strokeWidth/2));
+  colorcircle.setAttribute("fill", currentColor);
+  colorcircle.setAttribute("stroke", "black")
+  currentColorDiv.appendChild(colorcircle);
+}
+
+currentColorDiv.addEventListener("click", changeWidth);
 
 var draw = function(d) {
   isDrawing = d;
@@ -46,7 +88,7 @@ var draw = function(d) {
       line.setAttribute('points', "");
       line.setAttribute('fill', "none");
       line.setAttribute('stroke', currentColor);
-      line.setAttribute('stroke-width', "3");
+      line.setAttribute('stroke-width', strokeWidth);
       lastLine = line;
       c.appendChild(line);
       // var line = document.createElementNS('http://www.w3.org/2000/svg','line');

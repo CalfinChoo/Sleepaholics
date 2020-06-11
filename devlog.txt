@@ -16,3 +16,6 @@ jacksonZ -- 2020-06-11 1:51
 
 jacksonZ -- 2020-06-11 2:58
   - Removed password for games
+
+derekL == 2020-06-09 14:03
+  - Added stroke width option
