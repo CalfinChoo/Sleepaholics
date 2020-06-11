@@ -5,7 +5,7 @@ def init_db(DB_FILE):
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
     c.execute("CREATE TABLE IF NOT EXISTS USER(username TEXT, password TEXT, ign TEXT);")
-    c.execute("CREATE TABLE IF NOT EXISTS GAMES(room_code TEXT, password TEXT, player_count INTEGER);")
+    c.execute("CREATE TABLE IF NOT EXISTS GAMES(room_code TEXT, player_count INTEGER);")
     db.commit()
     db.close()
 
@@ -45,25 +45,19 @@ def checkroomid(DB_FILE, room_id):
         return True
     return False
 
-def createRoom(DB_FILE, room_id, password):
+def createRoom(DB_FILE, room_id):
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
-    c.execute("INSERT INTO GAMES VALUES(\"{}\", \"{}\", 1);".format(room_id, generate_password_hash(password)))
+    c.execute("INSERT INTO GAMES VALUES(\"{}\", 1);".format(room_id))
     db.commit()
     db.close()
     return True
 
-def findRoom(DB_FILE, room_id, password):
+def findRoom(DB_FILE, room_id):
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
     c.execute("SELECT * FROM GAMES WHERE room_code = \"{}\";".format(room_id))
     q = c.fetchall()
     if len(q) == 0:
         return False
-    if check_password_hash(q[0][1], password):
-        playercount = q[0][2] + 1
-        c.execute("UPDATE GAMES SET player_count = {} WHERE room_code = \"{}\"".format(playercount, room_id))
-        db.commit()
-        db.close()
-        return True
-    return False
+    return True

@@ -13,3 +13,6 @@ derekL -- 2020-06-09 19:21
 jacksonZ -- 2020-06-11 1:51
   - Fixed up bugs with creating rooms (code will be replaced with websocket later)
   - Organized code a bit
+
+jacksonZ -- 2020-06-11 2:58
+  - Removed password for games
