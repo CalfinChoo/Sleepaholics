@@ -6,11 +6,15 @@ Game
 
 {% block style %}
 <style type="text/css" rel="stylesheet">
-  div {
-    border: 1px solid;
-    position: absolute
+  .container-fluid {
+    position: absolute;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 25%;
   }
   #header {
+    border: 1px solid;
+    position: absolute;
     height: 50px;
     width: 90%;
     transform: translateX(-50%);
@@ -18,20 +22,60 @@ Game
     top: 15%;
   }
   #playerlist {
+    border: 1px solid;
     height: 30vw;
-    width: 22%;
+    width: 100%;
+    position: relative;
     transform: translateX(-50%);
-    left: 16%;
-    top: 25%;
+    left: 50%;
   }
   #chat {
+    border: 1px solid;
     height: 30vw;
-    width: 22%;
+    width: 100%;
+    position: relative;
     transform: translateX(-50%);
-    left: 84%;
+    left: 50%;
+  }
+  #canvas {
+    border: 1px solid;
+    position: relative;
+    transform: translateX(-50%);
+    left: 50%;
     top: 25%;
   }
-  .svg-container {
+  .toolbar, #tb {
+    border: 1px solid;
+  }
+  #tb {
+    margin-top: 10px;
+    height: 50px;
+    position: relative;
+  }
+  #currentColor {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: black;
+  }
+  #colors {
+    position: absolute;
+    left: 50px;
+    width: 275px;
+    height: 50px;
+  }
+  .color {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+  }
+  #clear {
+    position: absolute;
+    left: 325px;
+    width: 25px;
+    height 25px;
+  }
+  <!-- .svg-container {
   	display: inline-block;
     transform: translateX(-50%);
     left: 50%;
@@ -46,7 +90,9 @@ Game
   	position: absolute;
   	top: 0;
   	left: 0;
-  }
+    width: 40vw;
+    height: 30vw;
+  } -->
 </style>
 {% endblock %}
 
@@ -59,21 +105,71 @@ Roomcode: {{room_id}} <br>
 <div id="header">
 time, rounds, word
 </div>
-<div id="playerlist">
-PlayerList
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm">
+      <div id="playerlist">
+      PlayerList
+      </div>
+    </div>
+    <div class="col-xl">
+      <svg id="canvas" height="500"
+           width="800" style="border: 1px solid;">
+      </svg>
+      <div id="tb">
+          <div class="toolbar" id="currentColor"></div>
+          <div id="colors">
+            <div class="color" id="white" style="background-color: white;"></div>
+            <div class="color" id="gray" style="background-color: #C1C0C1; left:25px;"></div>
+            <div class="color" id="red" style="background-color: #EC160C; left:50px;"></div>
+            <div class="color" id="orange" style="background-color: #FE7101; left:75px;"></div>
+            <div class="color" id="yellow" style="background-color: #FFE202; left:100px;"></div>
+            <div class="color" id="green" style="background-color: #05CB03; left:125px;"></div>
+            <div class="color" id="lightblue" style="background-color: #01B2FF; left:150px;"></div>
+            <div class="color" id="blue" style="background-color: #2021D1; left:175px;"></div>
+            <div class="color" id="purple" style="background-color: #A400B7; left:200px;"></div>
+            <div class="color" id="pink" style="background-color: #D07CA8; left:225px;"></div>
+            <div class="color" id="brown" style="background-color: #A0522E; left:250px;"></div>
+            <div class="color" id="black" style="background-color: black; top:25px;"></div>
+            <div class="color" id="gray2" style="background-color: #534B46; left:25px; top:25px;"></div>
+            <div class="color" id="red2" style="background-color: #701007; left:50px; top:25px;"></div>
+            <div class="color" id="orange2" style="background-color: #C33801; left:75px; top:25px;"></div>
+            <div class="color" id="yellow2" style="background-color: #E8A100; left:100px; top:25px;"></div>
+            <div class="color" id="green2" style="background-color: #00590A; left:125px; top:25px;"></div>
+            <div class="color" id="lightblue2" style="background-color: #01579D; left:150px; top:25px;"></div>
+            <div class="color" id="blue2" style="background-color: #0E0766; left:175px; top:25px;"></div>
+            <div class="color" id="purple2" style="background-color: #51036A; left:200px; top:25px;"></div>
+            <div class="color" id="pink2" style="background-color: #A85270; left:225px; top:25px;"></div>
+            <div class="color" id="brown2" style="background-color: #5A341A; left:250px; top:25px;"></div>
+          </div>
+          <div id="clear">
+            Erase
+          </div>
+
+        </div>
+    </div>
+    <div class="col-sm">
+      <div id="chat">
+      Chat
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="svg-container">
+
+
+
+
+<!-- <div class="svg-container">
   <svg id="canvas" version="1.1" viewBox="0 0 500 400"
   preserveAspectRatio="xMinYMin meet" class="svg-content">
   <circle fill="#F7941E" stroke="#231F20" stroke-width="10"
   	stroke-miterlimit="10" cx="250" cy="250" r="200" opacity="0.6" />
+    <polyline points="0 0 50 50 100 10" fill="none" stroke="black"></polyline>
   </svg>
-</div>
+</div> -->
 
-<div id="chat">
-Chat
-</div>
 {% endblock %}
 
 {% block script %}
@@ -82,4 +178,5 @@ Chat
   homeBut.addEventListener("click", function() {
     window.location.href = "/home"})
 </script>
+<script src="/static/script.js" charset="utf-8"></script>
 {% endblock %}
