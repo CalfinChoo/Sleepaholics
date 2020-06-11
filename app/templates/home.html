@@ -23,9 +23,6 @@
                     <form action="/game" method="POST">
                         <label>Room ID</label><br>
                         <input type="text" name="room_id"><br>
-                        <label>Password</label><br>
-                        <input type="text" name="password"><br>
-                        <button class="btn btn-success mt-2" type="submit">Join</button>
                     </form>
                     {% for message in get_flashed_messages() %}
                         <p style="color: red;">{{ message }}</p>
