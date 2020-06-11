@@ -10,7 +10,7 @@ import random
 import string
 from os import urandom
 
-from db import init_db, addUser, checkUser
+from db import *
 from pprint import pprint
 
 app = Flask(__name__)
@@ -56,18 +56,30 @@ def register():
 
 @app.route("/create")
 def create():
+    dup = True
     roomCode = ''
-    for i in range(6):
-        roomCode+=random.choice(string.ascii_letters + string.digits)
+    while dup:
+        for i in range(6):
+            roomCode+=random.choice(string.ascii_letters + string.digits)
+        if checkroomid(DB_FILE, roomCode):
+            dup = False
     return render_template('create.html', room_id=roomCode)
+
+@app.route("/initroom/<room_id>", methods=["GET", 'POST'])
+def initroom(room_id):
+    createRoom(DB_FILE, room_id, request.form["password"])
+    session["room_id"] = room_id
+    return redirect(url_for("game"))
 
 @app.route("/game", methods=["GET", "POST"])
 def game():
     if len(request.form) != 0:
-        # insert room_id / password checker websocket thingy
+        # change lines below for room_id / password checker websocket thingy
         # if not match / does not exist, flash error and redirecct to home
-        return render_template("game.html", room_id = request.form["room_id"])
-    return render_template('game.html')
+        if findRoom(DB_FILE, request.form["room_id"], request.form["password"]):
+            return render_template("game.html", room_id = request.form["room_id"])
+        return redirect(url_for("home"))
+    return render_template('game.html', room_id = session["room_id"])
 
 #logout route: removes the user from session and redirects to root
 @app.route("/logout")
