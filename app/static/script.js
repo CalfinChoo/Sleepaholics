@@ -107,11 +107,12 @@ var update = function(e) {
   // var n = new Date().getTime();
   if (lastLine) {
     var point = c.createSVGPoint();
-    // var rect = e.currentTarget.getBoundingClientRect();
-    // console.log(event.offsetX);
-    // console.log(rect.top);
-    point.x = event.offsetX;
-    point.y = event.offsetY;
+    var rect = e.currentTarget.getBoundingClientRect();
+    var x = e.clientX - rect.left; //x position within the element.
+    var y = e.clientY - rect.top;  //y position within the element
+    point.x = x;
+    point.y = y;
+    // console.log(e.currentTarget);
     lastLine.points.appendItem(point);
   }
 };
