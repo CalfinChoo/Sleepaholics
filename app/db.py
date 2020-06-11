@@ -5,7 +5,7 @@ def init_db(DB_FILE):
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
     c.execute("CREATE TABLE IF NOT EXISTS USER(username TEXT, password TEXT, ign TEXT);")
-    c.execute("CREATE TABLE IF NOT EXISTS GAMES(room_code TEXT, player_count INTEGER);")
+    c.execute("CREATE TABLE IF NOT EXISTS GAMES(room_code TEXT);")
     db.commit()
     db.close()
 
@@ -48,7 +48,7 @@ def checkroomid(DB_FILE, room_id):
 def createRoom(DB_FILE, room_id):
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
-    c.execute("INSERT INTO GAMES VALUES(\"{}\", 1);".format(room_id))
+    c.execute("INSERT INTO GAMES VALUES(\"{}\");".format(room_id))
     db.commit()
     db.close()
     return True

@@ -1,89 +1,118 @@
 {% extends "index.html" %}
 
-{% block title %}
-Game
-{% endblock %}
+{% block title %}Game{% endblock %}
 
 {% block style %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <style type="text/css" rel="stylesheet">
-  div {
-    border: 1px solid;
-    position: absolute
-  }
-  #header {
-    height: 50px;
-    width: 90%;
-    transform: translateX(-50%);
-    left: 50%;
-    top: 15%;
-  }
-  #playerlist {
-    height: 30vw;
-    width: 22%;
-    transform: translateX(-50%);
-    left: 16%;
-    top: 25%;
-  }
-  #chat {
-    height: 30vw;
-    width: 22%;
-    transform: translateX(-50%);
-    left: 84%;
-    top: 25%;
-  }
-  .svg-container {
-  	display: inline-block;
-    transform: translateX(-50%);
-    left: 50%;
-    top: 25%;
-  	width: 40vw;
-    height: 30vw;
-  	vertical-align: middle;
-  	overflow: hidden;
-  }
-  .svg-content {
-  	display: inline-block;
-  	position: absolute;
-  	top: 0;
-  	left: 0;
-  }
+    div {
+        border: 1px solid;
+        position: absolute
+    }
+    #header {
+        height: 50px;
+        width: 90%;
+        transform: translateX(-50%);
+        left: 50%;
+        top: 15%;
+    }
+    #playerlist {
+        height: 30vw;
+        width: 22%;
+        transform: translateX(-50%);
+        left: 16%;
+        top: 25%;
+    }
+    #chat {
+        height: 30vw;
+        width: 22%;
+        transform: translateX(-50%);
+        left: 84%;
+        top: 25%;
+    }
+    .svg-container {
+        display: inline-block;
+        transform: translateX(-50%);
+        left: 50%;
+        top: 25%;
+        width: 40vw;
+        height: 30vw;
+        vertical-align: middle;
+        overflow: hidden;
+    }
+    .svg-content {
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 </style>
 {% endblock %}
 
 {% block main %}
 
 <center>
-  <h3> PICTIONARY </h3>
-  Roomcode: {{room_id}} <br>
-  <button id="home"> Home </button>
+    <h3> Pictionary </h3>
+    Roomcode: {{room_id}} <br>
+    <button id="home"> Home </button>
 </center>
 
 <div id="header">
-  time, rounds, word
+    time, rounds, word
 </div>
 
 <div id="playerlist">
-  PlayerList
+    PlayerList
 </div>
 
 <div class="svg-container">
-  <svg id="canvas" version="1.1" viewBox="0 0 500 400"
-    preserveAspectRatio="xMinYMin meet" class="svg-content">
-      <circle fill="#F7941E" stroke="#231F20" stroke-width="10"
-  	stroke-miterlimit="10" cx="250" cy="250" r="200" opacity="0.6" />
-  </svg>
+    <svg id="canvas" version="1.1" viewBox="0 0 500 400"
+        preserveAspectRatio="xMinYMin meet" class="svg-content">
+            <circle fill="#F7941E" stroke="#231F20" stroke-width="10"
+        stroke-miterlimit="10" cx="250" cy="250" r="200" opacity="0.6" />
+    </svg>
 </div>
 
 <div id="chat">
-  Chat
+    <ul id="messages"></ul>
+    <input type="text" id="myMessage">
+    <button id="sendbutton">Send</button>
 </div>
-
 {% endblock %}
 
 {% block script %}
 <script>
-  homeBut = document.getElementById("home");
-  homeBut.addEventListener("click", function() {
-    window.location.href = "/home"})
+    homeBut = document.getElementById("home");
+    homeBut.addEventListener("click", function() {
+        window.location.href = "/home"})
+
+    $(document).ready(function() {
+        var socket = io.connect('http://127.0.0.1:5000/');
+
+        socket.on('connect', function() {
+            socket.emit('join_room', {
+                room: "{{ room }}"
+            });
+        });
+
+        socket.on('room_announcement', function(data) {
+            $("#messages").append("<li>User joined room!</li>")
+        })
+
+        socket.on('receive_message', function(data) {
+            console.log(data.message)
+            $("#messages").append("<li>"+data.message+"</li>")
+        })
+
+        $("#sendbutton").on('click', function() {
+            socket.emit('send_message', {
+                room: "{{ room }}",
+                message: $("#myMessage").val()
+            })
+            $("#myMessage").val("")
+        })
+
+    });
 </script>
 {% endblock %}

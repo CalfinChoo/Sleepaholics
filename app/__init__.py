@@ -76,9 +76,24 @@ def game():
         # change lines below for room_id / password checker websocket thingy
         # if not match / does not exist, flash error and redirecct to home
         if findRoom(DB_FILE, request.form["room_id"]):
-            return render_template("game.html", room_id = request.form["room_id"])
+            return render_template("game.html", room=request.form["room_id"], room_id=request.form["room_id"])
         return redirect(url_for("home"))
-    return render_template('game.html', room_id = session["room_id"])
+    return render_template('game.html', room=session["room_id"], room_id=session["room_id"])
+
+
+
+# WEBSOCKET STUFF
+@socketio.on('join_room')
+def handle_join_room_event(data):
+    print("User connected to room {}".format(data["room"]))
+    join_room(data['room'])
+    socketio.emit('room_announcement', room=data["room"])
+
+@socketio.on('send_message')
+def handle_send_message_event(data):
+    socketio.emit('receive_message', data, room=data["room"])
+
+
 
 #logout route: removes the user from session and redirects to root
 @app.route("/logout")
