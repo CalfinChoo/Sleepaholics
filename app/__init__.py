@@ -4,6 +4,8 @@
 # 2020-06-05
 
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify, flash
+from flask_socketio import SocketIO, send, join_room
+
 import urllib.request, json
 import os
 import random
@@ -15,6 +17,7 @@ from pprint import pprint
 
 app = Flask(__name__)
 app.secret_key = urandom(32)
+socketio = SocketIO(app, cors_allowed_origins="*")
 DB_FILE = "info.db"
 init_db(DB_FILE)
 
@@ -90,4 +93,4 @@ def logout():
 
 if __name__ == "__main__":
     app.debug = True
-    app.run()
+    socketio.run(app)
