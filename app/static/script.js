@@ -94,6 +94,7 @@ var draw = function(d) {
       line.setAttribute('fill', "none");
       line.setAttribute('stroke', currentColor);
       line.setAttribute('stroke-width', strokeWidth);
+      line.setAttribute('stroke-linecap', "round");
       lastLine = line;
       c.appendChild(line);
       // var line = document.createElementNS('http://www.w3.org/2000/svg','line');
