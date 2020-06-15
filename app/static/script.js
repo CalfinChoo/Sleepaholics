@@ -123,7 +123,7 @@ var update = function(e) {
   }
 };
 
-var clean = function(e) {
+var clean = function() {
   while (c.childElementCount > 0) {
     c.removeChild(c.children[0]);
   }
