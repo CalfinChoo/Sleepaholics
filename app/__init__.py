@@ -10,6 +10,8 @@ import urllib.request, json
 import os
 import random
 import string
+import urllib.request as urllib2
+import json
 from os import urandom
 
 from db import *
@@ -78,7 +80,10 @@ def game():
         if findRoom(DB_FILE, request.form["room_id"]):
             return render_template("game.html", room=request.form["room_id"], room_id=request.form["room_id"])
         return redirect(url_for("home"))
-    return render_template('game.html', room=session["room_id"], room_id=session["room_id"])
+    thing = urllib2.urlopen("https://random-word-api.herokuapp.com/all")
+    thing2 = thing.read()
+    thing3 = json.loads(thing2)
+    return render_template('game.html', room=session["room_id"], room_id=session["room_id"], words = thing3)
 
 
 

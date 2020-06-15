@@ -1,5 +1,10 @@
 var c = document.getElementById("canvas");
 var currentColorDiv = document.getElementById("currentColor");
+var header = document.getElementById("header");
+var minutes = 3;
+var seconds = 0;
+setTimeout('tick()',1000);
+var roundNumber = 1;
 var colors = [];
 var strokeWidth = 4;
 colors.push(document.getElementById("white"));
@@ -123,6 +128,38 @@ var clean = function() {
   }
   lastLine = null;
 };
+
+var updateHeader = function(){
+  header.innerHTML = "";
+  if(seconds < 10){
+    var time = document.createTextNode("Time Left  " + minutes + ":" + "0" + seconds);
+  }
+  else{
+    var time = document.createTextNode("Time Left  " + minutes + ":" + seconds);
+  }
+  var players = document.createTextNode("Players: ")
+  var roundNum = document.createTextNode("Round Number: " + roundNumber + "/" + "20")
+  header.appendChild(time);
+  header.appendChild(players);
+  header.appendChild(roundNum);
+}
+
+var tick = function(){
+  if(seconds == 0){
+    minutes-=1;
+    seconds = 60;
+  }
+  if(minutes<0){
+    //it's next player's turn
+    //pick a new word from wordlist
+    clean()
+  }
+  else{
+    seconds-=1;
+    setTimeout('tick()',1000);
+  }
+  updateHeader();
+}
 
 c.addEventListener("mousedown", function(){draw(true);});
 c.addEventListener("mousemove", function(e){if (isDrawing) update(e);});
