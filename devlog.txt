@@ -1,3 +1,6 @@
+calvinC -- 2020-06-04 15:45
+  - set up base files + short ReadME update
+
 jacksonZ -- 2020-06-09 18:22
   - DB is initialized whenever app is run
   - Created login/register routes
@@ -6,9 +9,16 @@ jacksonZ -- 2020-06-09 18:22
   - Create game creates new game with random room code and it creates a new row in DB (password optional)
   - Joining a game requires correct code and password, and adds one to the player count (nothing happens when you leave however)
   - Basic template and routes are done
+  
+calvinC -- 2020-06-09 18:55
+  - quick tidy up of html
+  - implemented flash error messages
 
 derekL -- 2020-06-09 19:21
   - Added random room code generation
+  
+calvinC -- 2020-06-10 22:41
+  - added route for game and set up the html and CSS template
 
 jacksonZ -- 2020-06-11 1:51
   - Fixed up bugs with creating rooms (code will be replaced with websocket later)
@@ -16,10 +26,20 @@ jacksonZ -- 2020-06-11 1:51
 
 jacksonZ -- 2020-06-11 2:58
   - Removed password for games
+  
+calvinC -- 2020-06-11 10:22
+  - implemented a lot of SVG drawing capabilities
+  - added a toolbar to show current color, change color, and clear SVG
 
-derekL -- 2020-06-09 14:03
+derekL -- 2020-06-11 14:03
   - Added stroke width option
 
 derekL -- 2020-06-15 11:35
  - Added timer and header stuff
  - Added word list from api in init.py
+ 
+calvinC -- 2020-06-15 12:10
+  - Updated ReadMe and requirements.txt
+  - fixed a drawing bug in Firefox
+  - changed to circle brush
+  - added a trash.jpg to clear canvas on toolbar
