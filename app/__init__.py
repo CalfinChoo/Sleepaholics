@@ -84,10 +84,7 @@ def game():
             updateUserRoom(DB_FILE, session["ign"], room_id=request.form["room_id"])
             return render_template("game.html", room=request.form["room_id"], room_id=request.form["room_id"], ign=session["ign"])
         return redirect(url_for("home"))
-    thing = urllib2.urlopen("https://random-word-api.herokuapp.com/all")
-    thing2 = thing.read()
-    thing3 = json.loads(thing2)
-    return render_template('game.html', room=session["room_id"], room_id=session["room_id"], words = thing3, ign=session["ign"])
+    return render_template('game.html', room=session["room_id"], room_id=session["room_id"], ign=session["ign"])
 
 # WEBSOCKET STUFF
 @socketio.on('join_room')
