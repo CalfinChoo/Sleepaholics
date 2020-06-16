@@ -1,10 +1,10 @@
 var c = document.getElementById("canvas");
 var currentColorDiv = document.getElementById("currentColor");
 var header = document.getElementById("header");
-var minutes = 3;
-var seconds = 0;
-setTimeout('tick()',1000);
-var roundNumber = 1;
+// var minutes = 3;
+// var seconds = 0;
+// setTimeout('tick()',1000);
+// var roundNumber = 1;
 var colors = [];
 var strokeWidth = 4;
 colors.push(document.getElementById("white"));
@@ -34,6 +34,9 @@ for (var i = 0; i < colors.length; i++) {
 }
 var clear = document.getElementById("clear");
 clear.addEventListener("click", function(){clean();});
+var word = document.getElementById("random");
+var wordHead = document.getElementById("wordHead");
+random.addEventListener("click", function(){newWord();});
 
 var isDrawing = false;
 var lastLine;
@@ -130,41 +133,48 @@ var clean = function() {
   lastLine = null;
 };
 
-var updateHeader = function(){
-  header.innerHTML = "";
-  if(seconds < 10){
-    var time = document.createTextNode("Time Left  " + minutes + ":" + "0" + seconds);
-  }
-  else{
-    var time = document.createTextNode("Time Left  " + minutes + ":" + seconds);
-  }
-  var players = document.createTextNode("Players: ")
-  var roundNum = document.createTextNode("Round Number: " + roundNumber + "/" + "20")
-  header.appendChild(time);
-  header.appendChild(players);
-  header.appendChild(roundNum);
+var newWord = function() {
+  wordHead.innerText = words[getRandomInt(words.length)];
+};
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
 }
 
-var tick = function(){
-  if(seconds == 0){
-    minutes-=1;
-    seconds = 60;
-  }
-  if(minutes<0){
-    //it's next player's turn
-    //pick a new word from wordlist
-    clean()
-  }
-  else{
-    seconds-=1;
-    setTimeout('tick()',1000);
-  }
-  updateHeader();
-}
+// var updateHeader = function(){
+//   header.innerHTML = "";
+//   if(seconds < 10){
+//     var time = document.createTextNode("Time Left  " + minutes + ":" + "0" + seconds);
+//   }
+//   else{
+//     var time = document.createTextNode("Time Left  " + minutes + ":" + seconds);
+//   }
+//   var players = document.createTextNode("Players: ")
+//   var roundNum = document.createTextNode("Round Number: " + roundNumber + "/" + "20")
+//   header.appendChild(time);
+//   header.appendChild(players);
+//   header.appendChild(roundNum);
+// }
+//
+// var tick = function(){
+//   if(seconds == 0){
+//     minutes-=1;
+//     seconds = 60;
+//   }
+//   if(minutes<0){
+//     //it's next player's turn
+//     //pick a new word from wordlist
+//     clean()
+//   }
+//   else{
+//     seconds-=1;
+//     setTimeout('tick()',1000);
+//   }
+//   updateHeader();
+// }
 
 c.addEventListener("mousedown", function(){draw(true);});
 c.addEventListener("mousemove", function(e){
     if (isDrawing) update(e);
-    console.log("moving");
+    // console.log("moving");
 });
 window.addEventListener("mouseup", function(){draw(false); });

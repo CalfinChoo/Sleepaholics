@@ -97,6 +97,8 @@
 </center>
 
 <div class="card p-3" id="header">
+  <button id="random" style="width:20%;position:absolute;transform:translate(0%, -50%);top:50%;"> Generate Random Word To Draw </button><br>
+  <h2 id="wordHead" style="position:absolute;transform:translate(-50%, -50%); left:50%; top:50%;"><i>Generate a word...</i></h2>
 </div>
 
 <div class="container-fluid">
@@ -109,8 +111,7 @@
         </div>
     <div class="col-xl">
       <svg id="canvas" height="500"
-           width="800">
-      </svg>
+           width="800"></svg>
       <div id="tb">
           <svg id="currentColor"></svg>
           <div id="colors">
@@ -146,8 +147,8 @@
     <div class="col-sm">
         <div class="card p-3" id="chat">
             <div class="overflow-auto pb-5" id="messages"></div>
-                <div class="w-100"> 
-                    <form id="message_input_form" autocomplete="off">     
+                <div class="w-100">
+                    <form id="message_input_form" autocomplete="off">
                         <input type="text" id="messageInput">
                         <button class="btn btn-success" type="submit" id="sendButton">Send</button>
                     </form>
@@ -159,11 +160,14 @@
 {% endblock %}
 
 {% block script %}
+<script>
+var words = {{words|safe}};
+</script>
 <script src="/static/script.js" charset="utf-8"></script>
 <script>
     $(document).ready(function() {
         var socket = io.connect('http://127.0.0.1:5000/');
-
+        // console.log({{words|safe}});
         socket.on('connect', function() {
             socket.emit('join_room', {
                 room: "{{ room }}",
@@ -188,6 +192,14 @@
             $("#messages").append("<b>" + data.ign + "</b>: " + data.message + "<br>");
         });
 
+        socket.on('receive_drawing', function(data) {
+            // console.log(data.ign);
+            if ("{{ign}}".localeCompare(data.ign) != 0) {
+              $("#canvas").html(data.drawing);
+              // console.log("{{ign}}");
+            }
+            // $("#messages").append("<b>" + data.ign + "</b>: " + data.message + "<br>");
+        });
 
         socket.on('update_player_list', function(data) {
             $("#playerlist").empty();
@@ -195,6 +207,29 @@
             for (i = 0; i < data.players.length; i++) {
                 $("#playerlist").append(data.players[i] + "<br>");
             }
+        });
+
+        $('#canvas').mousemove(function(e){
+          e.preventDefault();
+          var drawing = e.currentTarget;
+          if (drawing.childElementCount > 0) {
+            socket.emit("send_drawing", {
+              ign: "{{ ign }}",
+              room: "{{ room }}",
+              drawing: drawing.innerHTML
+            });
+          }
+        });
+        $('#clear').click(function(e){
+          e.preventDefault();
+          var drawing = e.currentTarget;
+          if (drawing.childElementCount > 0) {
+            socket.emit("send_drawing", {
+              ign: "{{ ign }}",
+              room: "{{ room }}",
+              drawing: drawing.innerHTML
+            });
+          }
         });
 
         $("#message_input_form").submit(function(e) {

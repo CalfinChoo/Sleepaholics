@@ -102,6 +102,10 @@ def handle_join_room_event(data):
 def handle_send_message_event(data):
     socketio.emit('receive_message', data, room=data["room"])
 
+@socketio.on('send_drawing')
+def handle_draw_message_event(data):
+    socketio.emit('receive_drawing', data, room=data["room"])
+
 @socketio.on('exit_room')
 def handle_exit_room_event(data):
     print("hello")
