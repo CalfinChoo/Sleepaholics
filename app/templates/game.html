@@ -13,7 +13,6 @@
     top: 25%;
   }
   #header {
-    border: 1px solid;
     position: absolute;
     height: 50px;
     width: 90%;
@@ -22,7 +21,6 @@
     top: 15%;
   }
   #playerlist {
-    border: 1px solid;
     height: 30vw;
     width: 100%;
     position: relative;
@@ -30,7 +28,6 @@
     left: 50%;
   }
   #chat {
-    border: 1px solid;
     height: 30vw;
     width: 100%;
     position: relative;
@@ -38,14 +35,10 @@
     left: 50%;
   }
   #canvas {
-    border: 1px solid;
     position: relative;
     transform: translateX(-50%);
     left: 50%;
     background-color: white;
-  }
-  .toolbar, #tb {
-    border: 1px solid;
   }
   #tb {
     margin-top: 10px;
@@ -73,9 +66,9 @@
     position: absolute;
     left: 325px;
     width: 25px;
-    height 25px;
+    height: 25px;
   }
-  <!-- .svg-container {
+  .svg-container {
   	display: inline-block;
     transform: translateX(-50%);
     left: 50%;
@@ -92,31 +85,31 @@
   	left: 0;
     width: 40vw;
     height: 30vw;
-  } -->
+  }
 </style>
 {% endblock %}
 
 {% block main %}
-
 <center>
     <h3> Pictionary </h3>
     Roomcode: {{room_id}} <br>
     <button id="home"> Home </button>
 </center>
 
-<div id="header">
+<div class="card p-3" id="header">
 </div>
 
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-sm">
-      <div id="playerlist">
-      PlayerList
-      </div>
-    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="card p-3">
+                <b class="pb-2">Players</b>
+                <div id="playerlist"></div>
+            </div>
+        </div>
     <div class="col-xl">
       <svg id="canvas" height="500"
-           width="800" style="border: 1px solid;">
+           width="800">
       </svg>
       <div id="tb">
           <svg id="currentColor"></svg>
@@ -151,62 +144,76 @@
         </div>
     </div>
     <div class="col-sm">
-      <div id="chat">
-          <ul id="messages"></ul>
-          <input type="text" id="myMessage">
-          <button id="sendbutton">Send</button>
-      </div>
+        <div class="card p-3" id="chat">
+            <div class="overflow-auto pb-5" id="messages"></div>
+                <div class="w-100"> 
+                    <form id="message_input_form" autocomplete="off">     
+                        <input type="text" id="messageInput">
+                        <button class="btn btn-success" type="submit" id="sendButton">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-
-
-
-
-
-<!-- <div class="svg-container">
-  <svg id="canvas" version="1.1" viewBox="0 0 500 400"
-  preserveAspectRatio="xMinYMin meet" class="svg-content">
-  <circle fill="#F7941E" stroke="#231F20" stroke-width="10"
-  	stroke-miterlimit="10" cx="250" cy="250" r="200" opacity="0.6" />
-    <polyline points="0 0 50 50 100 10" fill="none" stroke="black"></polyline>
-  </svg>
-</div> -->
 {% endblock %}
 
 {% block script %}
+<script src="/static/script.js" charset="utf-8"></script>
 <script>
-    homeBut = document.getElementById("home");
-    homeBut.addEventListener("click", function() {
-        window.location.href = "/home"})
-
     $(document).ready(function() {
         var socket = io.connect('http://127.0.0.1:5000/');
 
         socket.on('connect', function() {
             socket.emit('join_room', {
-                room: "{{ room }}"
+                room: "{{ room }}",
+                ign: "{{ ign }}"
             });
         });
 
-        socket.on('room_announcement', function(data) {
-            $("#messages").append("<li>User joined room!</li>")
+        $("#home").on("click", function() {
+            window.location.href = "/home";
+            socket.emit('exit_room', {
+                room: "{{ room }}",
+                ign: "{{ ign }}"
+            });
         })
+
+        socket.on('room_announcement', function(data) {
+            $("#messages").append("<b>" + data.ign + " joined the room!</b><br>");
+        });
 
         socket.on('receive_message', function(data) {
-            console.log(data.message)
-            $("#messages").append("<li>"+data.message+"</li>")
-        })
+            console.log(data);
+            $("#messages").append("<b>" + data.ign + "</b>: " + data.message + "<br>");
+        });
 
-        $("#sendbutton").on('click', function() {
-            socket.emit('send_message', {
-                room: "{{ room }}",
-                message: $("#myMessage").val()
-            })
-            $("#myMessage").val("")
-        })
+
+        socket.on('update_player_list', function(data) {
+            $("#playerlist").empty();
+            var i;
+            for (i = 0; i < data.players.length; i++) {
+                $("#playerlist").append(data.players[i] + "<br>");
+            }
+        });
+
+        $("#message_input_form").submit(function(e) {
+            e.preventDefault();
+            var message = $.trim($("#messageInput").val())
+            if (message.length) {
+                socket.emit("send_message", {
+                    ign: "{{ ign }}",
+                    room: "{{ room }}",
+                    message: message
+                });
+            }
+            $("#messageInput").val("")
+            $("#messageInput").focus()
+
+            var chatHeight = $("#messages")[0].scrollHeight;
+            $("#messages").scrollTop(chatHeight);
+        });
 
     });
 </script>
-<script src="/static/script.js" charset="utf-8"></script>
 {% endblock %}

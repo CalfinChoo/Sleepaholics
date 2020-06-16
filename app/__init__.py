@@ -41,6 +41,8 @@ def login():
         result = checkUser(DB_FILE, request.form["username"], request.form["password"])
         if result:
             session["ign"] = result
+            updateUserRoom(DB_FILE, session["ign"], leaving=True)
+            updateRoomExistence(DB_FILE)
             return redirect(url_for("home"))
         else:
             flash("Invalid credentials")
@@ -70,6 +72,7 @@ def create():
             dup = False
     session["room_id"] = room_id
     createRoom(DB_FILE, room_id)
+    updateUserRoom(DB_FILE, session["ign"], room_id=room_id)
     return redirect(url_for("game"))
 
 @app.route("/game", methods=["GET", "POST"])
@@ -78,27 +81,38 @@ def game():
         # change lines below for room_id / password checker websocket thingy
         # if not match / does not exist, flash error and redirecct to home
         if findRoom(DB_FILE, request.form["room_id"]):
-            return render_template("game.html", room=request.form["room_id"], room_id=request.form["room_id"])
+            updateUserRoom(DB_FILE, session["ign"], room_id=request.form["room_id"])
+            return render_template("game.html", room=request.form["room_id"], room_id=request.form["room_id"], ign=session["ign"])
         return redirect(url_for("home"))
     thing = urllib2.urlopen("https://random-word-api.herokuapp.com/all")
     thing2 = thing.read()
     thing3 = json.loads(thing2)
-    return render_template('game.html', room=session["room_id"], room_id=session["room_id"], words = thing3)
-
-
+    return render_template('game.html', room=session["room_id"], room_id=session["room_id"], words = thing3, ign=session["ign"])
 
 # WEBSOCKET STUFF
 @socketio.on('join_room')
 def handle_join_room_event(data):
-    print("User connected to room {}".format(data["room"]))
+    # print("{} connected to room {}".format(data["ign"], data["room"]))
     join_room(data['room'])
-    socketio.emit('room_announcement', room=data["room"])
+    data['players'] = getRoomPlayers(DB_FILE, data["room"])
+    socketio.emit('room_announcement', data, room=data["room"])
+    socketio.emit('update_player_list', data, room=data["room"])
 
 @socketio.on('send_message')
 def handle_send_message_event(data):
     socketio.emit('receive_message', data, room=data["room"])
 
+@socketio.on('exit_room')
+def handle_exit_room_event(data):
+    print("hello")
+    updateUserRoom(DB_FILE, data["ign"], leaving=True)
+    updateRoomExistence(DB_FILE)
+    data['players'] = getRoomPlayers(DB_FILE, data["room"])
+    socketio.emit('update_player_list', data, room=data["room"])
 
+# @socketio.on('drawing')
+# def handle_draw_event(data):
+#     socketio.emit('receive_drwaing', data, room=data["room"])
 
 #logout route: removes the user from session and redirects to root
 @app.route("/logout")

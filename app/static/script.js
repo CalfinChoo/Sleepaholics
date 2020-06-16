@@ -163,5 +163,8 @@ var tick = function(){
 }
 
 c.addEventListener("mousedown", function(){draw(true);});
-c.addEventListener("mousemove", function(e){if (isDrawing) update(e);});
+c.addEventListener("mousemove", function(e){
+    if (isDrawing) update(e);
+    console.log("moving");
+});
 window.addEventListener("mouseup", function(){draw(false); });
