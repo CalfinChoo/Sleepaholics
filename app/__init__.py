@@ -95,8 +95,9 @@ def handle_join_room_event(data):
     # print("{} connected to room {}".format(data["ign"], data["room"]))
     join_room(data['room'])
     data['players'] = getRoomPlayers(DB_FILE, data["room"])
-    socketio.emit('room_announcement', data, room=data["room"])
+    data['words'] = getWords(DB_FILE)
     socketio.emit('update_player_list', data, room=data["room"])
+    socketio.emit('room_announcement', data, room=data["room"])
 
 @socketio.on('send_message')
 def handle_send_message_event(data):

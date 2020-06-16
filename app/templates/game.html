@@ -157,13 +157,11 @@
         </div>
     </div>
 </div>
-{% endblock %}
 
 {% block script %}
 <script>
-var words = {{words|safe}};
+  var words;
 </script>
-<script src="/static/script.js" charset="utf-8"></script>
 <script>
     $(document).ready(function() {
         var socket = io.connect('http://127.0.0.1:5000/');
@@ -184,11 +182,11 @@ var words = {{words|safe}};
         })
 
         socket.on('room_announcement', function(data) {
+            words = data.words;
             $("#messages").append("<b>" + data.ign + " joined the room!</b><br>");
         });
 
         socket.on('receive_message', function(data) {
-            console.log(data);
             $("#messages").append("<b>" + data.ign + "</b>: " + data.message + "<br>");
         });
 
@@ -204,6 +202,7 @@ var words = {{words|safe}};
         socket.on('update_player_list', function(data) {
             $("#playerlist").empty();
             var i;
+            // console.log(data);
             for (i = 0; i < data.players.length; i++) {
                 $("#playerlist").append(data.players[i] + "<br>");
             }
@@ -251,4 +250,6 @@ var words = {{words|safe}};
 
     });
 </script>
+<script src="/static/script.js" charset="utf-8"></script>
+{% endblock %}
 {% endblock %}

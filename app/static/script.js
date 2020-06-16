@@ -34,8 +34,7 @@ for (var i = 0; i < colors.length; i++) {
 }
 var clear = document.getElementById("clear");
 clear.addEventListener("click", function(){clean();});
-var word = document.getElementById("random");
-var wordHead = document.getElementById("wordHead");
+var random = document.getElementById("random");
 random.addEventListener("click", function(){newWord();});
 
 var isDrawing = false;
@@ -133,12 +132,17 @@ var clean = function() {
   lastLine = null;
 };
 
-var newWord = function() {
-  wordHead.innerText = words[getRandomInt(words.length)];
-};
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
+  var newWord = function() {
+     // console.log(words);
+    //wordHead.innerText = wordList.children[getRandomInt(wordList.childElementCount)].innerText;
+    if (!words) {wordHead.innerHTML = "<i> Still initializing... </i>";}
+    else {wordHead.innerHTML = words[getRandomInt(words.length)];}
+  };
+
+
 
 // var updateHeader = function(){
 //   header.innerHTML = "";

@@ -1,11 +1,21 @@
 import sqlite3
 from werkzeug.security import check_password_hash, generate_password_hash
+import urllib.request as urllib2
+import json
 
 def init_db(DB_FILE):
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
     c.execute("CREATE TABLE IF NOT EXISTS USER(username TEXT, password TEXT, ign TEXT, room_id TEXT);")
     c.execute("CREATE TABLE IF NOT EXISTS GAMES(room_code TEXT);")
+    c.execute(" SELECT count(name) FROM sqlite_master WHERE type='table' AND name='WORDS' ")
+    if c.fetchone()[0] < 1:
+        c.execute('CREATE TABLE WORDS(word TEXT);')
+        thing = urllib2.urlopen("https://random-word-api.herokuapp.com/all")
+        thing2 = thing.read()
+        thing3 = json.loads(thing2)
+        for x in thing3:
+            c.execute('INSERT INTO WORDS VALUES (?)', (x,))
     db.commit()
     db.close()
 
@@ -62,6 +72,16 @@ def getRoomPlayers(DB_FILE, room_id):
         players.append(item[0])
     db.close()
     return players
+
+def getWords(DB_FILE):
+    db = sqlite3.connect(DB_FILE)
+    c = db.cursor()
+    c.execute("SELECT * FROM WORDS")
+    words = []
+    for w in c.fetchall():
+        words.append(w[0])
+    db.close()
+    return words
 
 def updateRoomExistence(DB_FILE):
     db = sqlite3.connect(DB_FILE)
