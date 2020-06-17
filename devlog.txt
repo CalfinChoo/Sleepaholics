@@ -34,6 +34,13 @@ calvinC -- 2020-06-11 10:22
 derekL -- 2020-06-11 14:03
   - Added stroke width option
 
+jeffL -- 2020-06-11 19:00
+  - Created websocket work folder and created chat app for reference
+  - Redesigned front-end appearance for aesthetic and created theme for app
+
+jeffL -- 2020-06-11 21:00
+  - Integrated synchronized chat with websockets into main project
+
 derekL -- 2020-06-15 11:35
  - Added timer and header stuff
  - Added word list from api in init.py
@@ -43,3 +50,8 @@ calvinC -- 2020-06-15 12:10
   - fixed a drawing bug in Firefox
   - changed to circle brush
   - added a trash.jpg to clear canvas on toolbar
+
+jeffL -- 2020-06-16 6:00
+  - Changed database table fields for room tracking
+  - Synchronized clients on game page (svg, playerlist)
+  - Fixed websocket bugs
