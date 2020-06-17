@@ -157,6 +157,7 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
 {% block script %}
 <script>
@@ -165,8 +166,9 @@
 <script>
     $(document).ready(function() {
         var socket = io.connect('http://127.0.0.1:5000/');
-        // console.log({{words|safe}});
+
         socket.on('connect', function() {
+            console.log("JOINING");
             socket.emit('join_room', {
                 room: "{{ room }}",
                 ign: "{{ ign }}"
@@ -194,15 +196,12 @@
             // console.log(data.ign);
             if ("{{ign}}".localeCompare(data.ign) != 0) {
               $("#canvas").html(data.drawing);
-              // console.log("{{ign}}");
             }
-            // $("#messages").append("<b>" + data.ign + "</b>: " + data.message + "<br>");
         });
 
         socket.on('update_player_list', function(data) {
             $("#playerlist").empty();
             var i;
-            // console.log(data);
             for (i = 0; i < data.players.length; i++) {
                 $("#playerlist").append(data.players[i] + "<br>");
             }
@@ -219,6 +218,7 @@
             });
           }
         });
+
         $('#clear').click(function(e){
           e.preventDefault();
           var drawing = e.currentTarget;
@@ -251,5 +251,5 @@
     });
 </script>
 <script src="/static/script.js" charset="utf-8"></script>
-{% endblock %}
+
 {% endblock %}

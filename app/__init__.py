@@ -89,12 +89,12 @@ def game():
 # WEBSOCKET STUFF
 @socketio.on('join_room')
 def handle_join_room_event(data):
-    # print("{} connected to room {}".format(data["ign"], data["room"]))
+    print("{} connected to room {}".format(data["ign"], data["room"]))
     join_room(data['room'])
     data['players'] = getRoomPlayers(DB_FILE, data["room"])
     data['words'] = getWords(DB_FILE)
-    socketio.emit('update_player_list', data, room=data["room"])
     socketio.emit('room_announcement', data, room=data["room"])
+    socketio.emit('update_player_list', data, room=data["room"])
 
 @socketio.on('send_message')
 def handle_send_message_event(data):
@@ -111,10 +111,6 @@ def handle_exit_room_event(data):
     updateRoomExistence(DB_FILE)
     data['players'] = getRoomPlayers(DB_FILE, data["room"])
     socketio.emit('update_player_list', data, room=data["room"])
-
-# @socketio.on('drawing')
-# def handle_draw_event(data):
-#     socketio.emit('receive_drwaing', data, room=data["room"])
 
 #logout route: removes the user from session and redirects to root
 @app.route("/logout")
